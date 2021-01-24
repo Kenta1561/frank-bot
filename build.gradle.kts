@@ -4,11 +4,12 @@ plugins {
     kotlin("jvm") version "1.4.21"
 }
 
-group = "me.kenta"
+group = "de.kenta1561"
 version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
