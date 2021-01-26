@@ -2,8 +2,10 @@ package frank.bot.handlers
 
 import discord4j.core.`object`.entity.Message
 import frank.api.Requester
+import frank.api.response.LocationSearchResponse
 import frank.api.service.LocationService
 import frank.commandPrefix
+import frank.util.apiEmbedTemplate
 import frank.util.getCommandArgs
 
 class LocationSearchHandler(
@@ -18,18 +20,18 @@ class LocationSearchHandler(
             val query = args.subList(2, args.size).joinToString(" ")
             requester.request(locationService.getStationsByName(query)) { data ->
                 data?.let {
-                    channel.createEmbed { embed ->
-                        embed.run {
-                            setTitle("Location results for $query")
-                            it.locationWrappers.map { w -> w.location }.forEach {
-                                addField(it.name, it.extId, true)
-                            }
-                        }
-                    }.subscribe()
+                    channel.createMessage { msg -> msg.setEmbed(getEmbed(query, it)) }.subscribe()
                 }
             }
         } else {
             commandHelp(channel)
+        }
+    }
+
+    private fun getEmbed(query: String, response: LocationSearchResponse) = apiEmbedTemplate.andThen { spec ->
+        spec.setTitle("Location results for $query")
+        response.locationWrappers.take(9).map { w -> w.location }.forEach {
+            spec.addField(it.name, it.extId, true)
         }
     }
 
