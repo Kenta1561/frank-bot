@@ -20,7 +20,7 @@ class LocationSearchHandler(
             val query = args.subList(2, args.size).joinToString(" ")
             requester.request(locationService.getStationsByName(query)) { data ->
                 data?.let {
-                    channel.createMessage { msg -> msg.setEmbed(getEmbed(query, it)) }.subscribe()
+                    channel.createMessage { msg -> msg.setEmbed(getLocationEmbed(query, it)) }.subscribe()
                 }
             }
         } else {
@@ -28,7 +28,7 @@ class LocationSearchHandler(
         }
     }
 
-    private fun getEmbed(query: String, response: LocationSearchResponse) = apiEmbedTemplate.andThen { spec ->
+    private fun getLocationEmbed(query: String, response: LocationSearchResponse) = apiEmbedTemplate.andThen { spec ->
         spec.setTitle("Location results for $query")
         response.locationWrappers.take(9).map { w -> w.location }.forEach {
             spec.addField(it.name, it.extId, true)

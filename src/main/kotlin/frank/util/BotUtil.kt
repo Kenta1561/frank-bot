@@ -10,5 +10,6 @@ fun Message.getCommandArgs() = content.split(" ")
 val embedTemplate = Consumer<EmbedCreateSpec> { spec -> spec.setColor(Color.DEEP_LILAC) }
 
 val apiEmbedTemplate: Consumer<EmbedCreateSpec> = embedTemplate.andThen { spec ->
+    spec.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Rhein-Main-Verkehrsverbund_logo.svg/1920px-Rhein-Main-Verkehrsverbund_logo.svg.png")
     spec.setFooter("Source: Rhein-Main-Verkehrsverbund", null)
 }
