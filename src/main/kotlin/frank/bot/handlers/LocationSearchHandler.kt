@@ -1,30 +1,21 @@
 package frank.bot.handlers
 
-import discord4j.core.`object`.entity.Message
+import discord4j.core.`object`.entity.channel.MessageChannel
 import frank.api.Requester
 import frank.api.response.LocationSearchResponse
 import frank.api.service.LocationService
 import frank.commandPrefix
 import frank.util.apiEmbedTemplate
-import frank.util.getCommandArgs
 
 class LocationSearchHandler(
     private val requester: Requester,
     private val locationService: LocationService
 ) : MessageHandler() {
 
-    override fun processMessage(message: Message) {
-        val args = message.getCommandArgs()
-        val channel = message.channel.block()!!
-        if(args.size > 2) {
-            val query = args.subList(2, args.size).joinToString(" ")
-            requester.request(locationService.getStationsByName(query)) { data ->
-                data?.let {
-                    channel.createMessage { msg -> msg.setEmbed(getLocationEmbed(query, it)) }.subscribe()
-                }
-            }
-        } else {
-            commandHelp(channel)
+    override fun processMessage(channel: MessageChannel, args: List<String>) {
+        val query = args.subList(2, args.size).joinToString(" ")
+        requester.request(locationService.getStationsByName(query)) { response ->
+            channel.createMessage { msg -> msg.setEmbed(getLocationEmbed(query, response)) }.subscribe()
         }
     }
 
@@ -34,6 +25,8 @@ class LocationSearchHandler(
             spec.addField(it.name, it.extId, true)
         }
     }
+
+    override fun isValidRequest(args: List<String>) = args.size > 2
 
     override fun usage() = "$commandPrefix search <query>"
 

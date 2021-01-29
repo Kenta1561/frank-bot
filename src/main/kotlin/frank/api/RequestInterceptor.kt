@@ -13,6 +13,7 @@ class RequestInterceptor(private val accessId: String) : Interceptor {
             .addQueryParameter("accessId", accessId)
             .addQueryParameter("format", "json")
             .build()
+        println("Request sent.")
         return chain.proceed(request.newBuilder().url(updatedUrl).build())
     }
 

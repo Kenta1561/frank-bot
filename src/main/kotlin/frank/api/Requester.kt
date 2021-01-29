@@ -11,13 +11,13 @@ class Requester {
     }
 
     fun interface SimpleCallback<T> {
-        fun onResponse(data: T?)
+        fun onResponse(data: T)
     }
 
     private class RequestCallback<T>(val simpleCallback: SimpleCallback<T>) : Callback<T> {
 
         override fun onResponse(call: Call<T>, response: Response<T>) {
-            simpleCallback.onResponse(response.body())
+            response.body()?.let { simpleCallback.onResponse(it) }
         }
 
         override fun onFailure(call: Call<T>, t: Throwable) {
