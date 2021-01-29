@@ -4,9 +4,10 @@ import frank.api.RequestInterceptor
 import frank.api.Requester
 import frank.api.service.LocationService
 import frank.api.service.TripService
-import frank.bot.handlers.HelpHandler
-import frank.bot.handlers.LocationSearchHandler
-import frank.bot.handlers.TripSearchHandler
+import frank.bot.handlers.message.HelpHandler
+import frank.bot.handlers.message.LocationSearchHandler
+import frank.bot.handlers.message.TripSearchHandler
+import frank.bot.handlers.reaction.TripDetailHandler
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -40,5 +41,8 @@ val module = module {
     single { LocationSearchHandler(get(), get()) }
     single { TripSearchHandler(get(), get()) }
     single { HelpHandler() }
+
+    //ReactionHandlers
+    single { TripDetailHandler(get()) }
 
 }

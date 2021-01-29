@@ -1,4 +1,4 @@
-package frank.bot.handlers
+package frank.bot.handlers.message
 
 import discord4j.core.`object`.entity.channel.MessageChannel
 import frank.api.Requester
@@ -26,7 +26,7 @@ class LocationSearchHandler(
         }
     }
 
-    override fun isValidRequest(args: List<String>) = args.size > 2
+    override fun isValidMessage(args: List<String>) = args.size > 2
 
     override fun usage() = "$commandPrefix search <query>"
 

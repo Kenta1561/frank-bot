@@ -3,10 +3,12 @@ package frank
 import discord4j.core.DiscordClient
 import discord4j.core.`object`.entity.Message
 import discord4j.core.event.domain.message.MessageCreateEvent
-import frank.bot.handlers.HelpHandler
-import frank.bot.handlers.LocationSearchHandler
-import frank.bot.handlers.MessageHandler
-import frank.bot.handlers.TripSearchHandler
+import discord4j.core.event.domain.message.ReactionAddEvent
+import frank.bot.handlers.message.HelpHandler
+import frank.bot.handlers.message.LocationSearchHandler
+import frank.bot.handlers.message.MessageHandler
+import frank.bot.handlers.message.TripSearchHandler
+import frank.bot.handlers.reaction.TripDetailHandler
 import frank.di.module
 import frank.util.getCommandArgs
 import org.koin.core.component.KoinApiExtension
@@ -32,6 +34,9 @@ class FrankBot : KoinComponent {
                 .filter { msg -> msg.getCommandArgs()[0] == commandPrefix }
                 .filter { msg -> !msg.author.get().isBot }
                 .subscribe { msg -> handleMessage(msg) }
+            on(ReactionAddEvent::class.java)
+                .filterWhen { event -> event.user.map { user -> !user.isBot }}
+                .subscribe { event -> get<TripDetailHandler>().handle(event) }
             onDisconnect().block()
         }
     }

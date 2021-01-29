@@ -1,6 +1,5 @@
-package frank.bot.handlers
+package frank.bot.handlers.message
 
-import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.channel.MessageChannel
 import frank.commandPrefix
 
@@ -10,7 +9,7 @@ class HelpHandler : MessageHandler() {
         channel.createMessage("[WIP] Command Overview").subscribe()
     }
 
-    override fun isValidRequest(args: List<String>) = true
+    override fun isValidMessage(args: List<String>) = true
 
     override fun usage() = "Use $commandPrefix help to show available commands."
 
