@@ -3,9 +3,12 @@ package frank
 import discord4j.core.DiscordClient
 import discord4j.core.`object`.entity.Message
 import discord4j.core.event.domain.message.MessageCreateEvent
-import frank.bot.handlers.HelpHandler
-import frank.bot.handlers.LocationSearchHandler
-import frank.bot.handlers.MessageHandler
+import discord4j.core.event.domain.message.ReactionAddEvent
+import frank.bot.handlers.message.HelpHandler
+import frank.bot.handlers.message.LocationSearchHandler
+import frank.bot.handlers.message.MessageHandler
+import frank.bot.handlers.message.TripSearchHandler
+import frank.bot.handlers.reaction.TripDetailHandler
 import frank.di.module
 import frank.util.getCommandArgs
 import org.koin.core.component.KoinApiExtension
@@ -20,7 +23,8 @@ class FrankBot : KoinComponent {
 
     private val gateway = DiscordClient.create(System.getenv("DISCORD_TOKEN")).login().block()!!
     private val messageHandlers = mapOf<String, MessageHandler>(
-        "search" to get<LocationSearchHandler>()
+        "search" to get<LocationSearchHandler>(),
+        "trip" to get<TripSearchHandler>()
     )
 
     init {
@@ -29,14 +33,16 @@ class FrankBot : KoinComponent {
                 .map(MessageCreateEvent::getMessage)
                 .filter { msg -> msg.getCommandArgs()[0] == commandPrefix }
                 .filter { msg -> !msg.author.get().isBot }
-                .map { msg -> handleMessage(msg) }
-                .subscribe()
+                .subscribe { msg -> handleMessage(msg) }
+            on(ReactionAddEvent::class.java)
+                .filterWhen { event -> event.user.map { user -> !user.isBot }}
+                .subscribe { event -> get<TripDetailHandler>().handle(event) }
             onDisconnect().block()
         }
     }
 
     private fun handleMessage(message: Message) {
-        messageHandlers.getOrDefault(message.getCommandArgs().getOrNull(1), get<HelpHandler>()).processMessage(message)
+        messageHandlers.getOrDefault(message.getCommandArgs().getOrNull(1), get<HelpHandler>()).handle(message)
     }
 
 }
