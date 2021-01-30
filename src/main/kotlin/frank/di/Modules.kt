@@ -2,6 +2,7 @@ package frank.di
 
 import frank.api.RequestInterceptor
 import frank.api.Requester
+import frank.api.service.BoardService
 import frank.api.service.LocationService
 import frank.api.service.TripService
 import frank.bot.handlers.message.HelpHandler
@@ -36,6 +37,7 @@ val module = module {
     //Services
     single { get<Retrofit>().create(LocationService::class.java) }
     single { get<Retrofit>().create(TripService::class.java) }
+    single { get<Retrofit>().create(BoardService::class.java) }
 
     //MessageHandlers
     single { LocationSearchHandler(get(), get()) }

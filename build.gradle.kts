@@ -20,6 +20,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.discord4j:discord4j-core:3.1.3")
+    implementation("joda-time:joda-time:2.10.9")
     testImplementation(kotlin("test-junit"))
 }
 

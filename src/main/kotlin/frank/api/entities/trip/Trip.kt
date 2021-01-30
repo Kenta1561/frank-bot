@@ -1,6 +1,7 @@
 package frank.api.entities.trip
 
 import com.google.gson.annotations.SerializedName
+import frank.api.entities.Product
 
 class Trip(@SerializedName("LegList") val legListWrapper: LegListWrapper) {
 
@@ -28,7 +29,5 @@ class Trip(@SerializedName("LegList") val legListWrapper: LegListWrapper) {
         fun getRoute() = "$origin :arrow_forward: $destination"
 
     }
-
-    class Product(val line: String)
 
 }
