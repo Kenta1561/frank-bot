@@ -2,21 +2,21 @@ package frank.api
 
 import discord4j.common.util.Snowflake
 import discord4j.core.`object`.entity.Message
-import frank.api.response.TripSearchResponse
+import frank.api.response.TripResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class Requester {
 
-    private val tripResponseCache = HashMap<Snowflake, TripSearchResponse>()
+    private val tripResponseCache = HashMap<Snowflake, TripResponse>()
 
     fun <T> request(call: Call<T>, simpleCallback: SimpleCallback<T>) {
         call.enqueue(RequestCallback(simpleCallback))
     }
 
     //region Trip response caching
-    fun cacheTripResponse(message: Message, response: TripSearchResponse) = message.also {
+    fun cacheTripResponse(message: Message, response: TripResponse) = message.also {
         tripResponseCache[message.id] = response
     }
 

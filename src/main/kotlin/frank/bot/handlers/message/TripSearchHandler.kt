@@ -1,11 +1,10 @@
 package frank.bot.handlers.message
 
-import discord4j.common.util.Snowflake
 import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.channel.MessageChannel
 import discord4j.core.`object`.reaction.ReactionEmoji
 import frank.api.Requester
-import frank.api.response.TripSearchResponse
+import frank.api.response.TripResponse
 import frank.api.service.TripService
 import frank.commandPrefix
 import frank.util.apiEmbedTemplate
@@ -27,7 +26,7 @@ class TripSearchHandler(private val requester: Requester, private val tripServic
         }
     }
 
-    private fun getTripResultEmbed(response: TripSearchResponse) = apiEmbedTemplate.andThen { spec ->
+    private fun getTripResultEmbed(response: TripResponse) = apiEmbedTemplate.andThen { spec ->
         spec.setTitle(response.getDescription())
         spec.setDescription("Select a reaction to show details.")
         response.trips.forEachIndexed { index, trip ->

@@ -3,7 +3,7 @@ package frank.api.response
 import com.google.gson.annotations.SerializedName
 import frank.api.entities.trip.Trip
 
-class TripSearchResponse(@SerializedName("Trip") val trips: List<Trip>) {
+class TripResponse(@SerializedName("Trip") val trips: List<Trip>) {
 
     //Possible IndexOutOfBoundsException
     fun getOrigin() = trips[0].getOrigin()

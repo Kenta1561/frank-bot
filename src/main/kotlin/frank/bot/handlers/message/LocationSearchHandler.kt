@@ -2,7 +2,7 @@ package frank.bot.handlers.message
 
 import discord4j.core.`object`.entity.channel.MessageChannel
 import frank.api.Requester
-import frank.api.response.LocationSearchResponse
+import frank.api.response.LocationResponse
 import frank.api.service.LocationService
 import frank.commandPrefix
 import frank.util.apiEmbedTemplate
@@ -19,7 +19,7 @@ class LocationSearchHandler(
         }
     }
 
-    private fun getLocationEmbed(query: String, response: LocationSearchResponse) = apiEmbedTemplate.andThen { spec ->
+    private fun getLocationEmbed(query: String, response: LocationResponse) = apiEmbedTemplate.andThen { spec ->
         spec.setTitle("Location results for $query")
         response.locationWrappers.take(9).map { w -> w.location }.forEach {
             spec.addField(it.name, it.extId, true)
