@@ -9,12 +9,8 @@ interface BoardService {
 
     @GET("departureBoard")
     fun getDepartures(
-        @Query("extId") extId: String
-    ) : Call<BoardResponse>
-
-    @GET("arrivalBoard")
-    fun getArrivals(
-        @Query("extId") extId: String
+        @Query("extId") extId: String,
+        @Query("maxJourneys") maxJourneys: Int = 5
     ) : Call<BoardResponse>
 
 }

@@ -4,10 +4,7 @@ import discord4j.core.DiscordClient
 import discord4j.core.`object`.entity.Message
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.event.domain.message.ReactionAddEvent
-import frank.bot.handlers.message.HelpHandler
-import frank.bot.handlers.message.LocationSearchHandler
-import frank.bot.handlers.message.MessageHandler
-import frank.bot.handlers.message.TripSearchHandler
+import frank.bot.handlers.message.*
 import frank.bot.handlers.reaction.TripDetailHandler
 import frank.di.module
 import frank.util.getCommandArgs
@@ -23,8 +20,9 @@ class FrankBot : KoinComponent {
 
     private val gateway = DiscordClient.create(System.getenv("DISCORD_TOKEN")).login().block()!!
     private val messageHandlers = mapOf<String, MessageHandler>(
-        "search" to get<LocationSearchHandler>(),
-        "trip" to get<TripSearchHandler>()
+        "search" to get<LocationHandler>(),
+        "trip" to get<TripHandler>(),
+        "departures" to get<BoardHandler>()
     )
 
     init {

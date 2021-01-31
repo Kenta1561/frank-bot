@@ -12,21 +12,19 @@ import frank.util.isExtId
 import frank.util.reactionEmojis
 import reactor.core.publisher.Flux
 
-class TripSearchHandler(private val requester: Requester, private val tripService: TripService) : MessageHandler() {
-
-
+class TripHandler(private val requester: Requester, private val tripService: TripService) : MessageHandler() {
 
     override fun processMessage(channel: MessageChannel, args: List<String>) {
         requester.request(tripService.getTrips(args[2], args[3])) { response ->
             channel
-                .createMessage { msg -> msg.setEmbed(getTripResultEmbed(response)) }
+                .createMessage { msg -> msg.setEmbed(getEmbed(response)) }
                 .map { msg -> requester.cacheTripResponse(msg, response) }
                 .flatMapMany { msg -> addNumberReactions(msg) }
                 .subscribe()
         }
     }
 
-    private fun getTripResultEmbed(response: TripResponse) = apiEmbedTemplate.andThen { spec ->
+    private fun getEmbed(response: TripResponse) = apiEmbedTemplate.andThen { spec ->
         spec.setTitle(response.getDescription())
         spec.setDescription("Select a reaction to show details.")
         response.trips.forEachIndexed { index, trip ->

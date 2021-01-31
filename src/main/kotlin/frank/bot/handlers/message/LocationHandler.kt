@@ -7,7 +7,7 @@ import frank.api.service.LocationService
 import frank.commandPrefix
 import frank.util.apiEmbedTemplate
 
-class LocationSearchHandler(
+class LocationHandler(
     private val requester: Requester,
     private val locationService: LocationService
 ) : MessageHandler() {
@@ -15,11 +15,11 @@ class LocationSearchHandler(
     override fun processMessage(channel: MessageChannel, args: List<String>) {
         val query = args.subList(2, args.size).joinToString(" ")
         requester.request(locationService.getStationsByName(query)) { response ->
-            channel.createMessage { msg -> msg.setEmbed(getLocationEmbed(query, response)) }.subscribe()
+            channel.createMessage { msg -> msg.setEmbed(getEmbed(query, response)) }.subscribe()
         }
     }
 
-    private fun getLocationEmbed(query: String, response: LocationResponse) = apiEmbedTemplate.andThen { spec ->
+    private fun getEmbed(query: String, response: LocationResponse) = apiEmbedTemplate.andThen { spec ->
         spec.setTitle("Location results for $query")
         response.locationWrappers.take(9).map { w -> w.location }.forEach {
             spec.addField(it.name, it.extId, true)

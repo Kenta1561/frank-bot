@@ -13,13 +13,13 @@ class TripDetailHandler(private val requester: Requester) : ReactionHandler() {
         val index = reactionEmojis.indexOf(event.emoji.asUnicodeEmoji().get().raw)
         val trip = requester.getCachedTripResponse(event.messageId).trips[index]
         event.channel.flatMap { channel ->
-            channel.createMessage { msg -> msg.setEmbed(getTripDetailEmbed(trip)) }
+            channel.createMessage { msg -> msg.setEmbed(getEmbed(trip)) }
         }.subscribe()
         requester.forgetTripResponse(event.messageId)
         event.message.flatMap { msg -> msg.delete() }.subscribe()
     }
 
-    private fun getTripDetailEmbed(trip: Trip) = Consumer<EmbedCreateSpec> { spec ->
+    private fun getEmbed(trip: Trip) = Consumer<EmbedCreateSpec> { spec ->
         spec.setTitle(trip.getDescription())
         trip.legListWrapper.legs.forEach { leg ->
             spec.addField(leg.getLine(), leg.getRoute(), false)
