@@ -1,11 +1,10 @@
 package frank.bot.handlers.reaction
 
 import discord4j.core.event.domain.message.ReactionAddEvent
-import discord4j.core.spec.EmbedCreateSpec
 import frank.api.Requester
 import frank.api.entities.trip.Trip
+import frank.util.apiEmbedTemplate
 import frank.util.reactionEmojis
-import java.util.function.Consumer
 
 class TripDetailHandler(private val requester: Requester) : ReactionHandler() {
 
@@ -19,7 +18,7 @@ class TripDetailHandler(private val requester: Requester) : ReactionHandler() {
         event.message.flatMap { msg -> msg.delete() }.subscribe()
     }
 
-    private fun getEmbed(trip: Trip) = Consumer<EmbedCreateSpec> { spec ->
+    private fun getEmbed(trip: Trip) = apiEmbedTemplate.andThen { spec ->
         spec.setTitle(trip.getDescription())
         trip.legListWrapper.legs.forEach { leg ->
             spec.addField(leg.getLine(), leg.getRoute(), false)

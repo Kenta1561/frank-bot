@@ -4,7 +4,6 @@ import frank.api.entities.location.Location
 import frank.util.getTimeFormat
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
-import java.time.LocalTime
 
 class TripStop(extId: String, name: String, val date: String, val time: String) : Location(extId, name) {
 

@@ -5,10 +5,10 @@ import frank.api.Requester
 import frank.api.service.BoardService
 import frank.api.service.LocationService
 import frank.api.service.TripService
-import frank.bot.handlers.message.BoardHandler
-import frank.bot.handlers.message.HelpHandler
-import frank.bot.handlers.message.LocationHandler
-import frank.bot.handlers.message.TripHandler
+import frank.bot.handlers.command.BoardHandler
+import frank.bot.handlers.command.HelpHandler
+import frank.bot.handlers.command.LocationHandler
+import frank.bot.handlers.command.TripHandler
 import frank.bot.handlers.reaction.TripDetailHandler
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
@@ -41,9 +41,9 @@ val module = module {
     single { get<Retrofit>().create(BoardService::class.java) }
 
     //MessageHandlers
-    single { LocationHandler(get(), get()) }
-    single { TripHandler(get(), get()) }
-    single { BoardHandler(get(), get()) }
+    single { LocationHandler(get()) }
+    single { TripHandler(get()) }
+    single { BoardHandler(get()) }
     single { HelpHandler() }
 
     //ReactionHandlers

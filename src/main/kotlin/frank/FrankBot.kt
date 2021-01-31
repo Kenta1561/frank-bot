@@ -4,7 +4,8 @@ import discord4j.core.DiscordClient
 import discord4j.core.`object`.entity.Message
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.event.domain.message.ReactionAddEvent
-import frank.bot.handlers.message.*
+import frank.api.Requester
+import frank.bot.handlers.command.*
 import frank.bot.handlers.reaction.TripDetailHandler
 import frank.di.module
 import frank.util.getCommandArgs
@@ -19,7 +20,7 @@ const val commandPrefix = "!frank"
 class FrankBot : KoinComponent {
 
     private val gateway = DiscordClient.create(System.getenv("DISCORD_TOKEN")).login().block()!!
-    private val messageHandlers = mapOf<String, MessageHandler>(
+    private val commandHandlers = mapOf<String, CommandHandler<*>>(
         "search" to get<LocationHandler>(),
         "trip" to get<TripHandler>(),
         "departures" to get<BoardHandler>()
@@ -40,7 +41,10 @@ class FrankBot : KoinComponent {
     }
 
     private fun handleMessage(message: Message) {
-        messageHandlers.getOrDefault(message.getCommandArgs().getOrNull(1), get<HelpHandler>()).handle(message)
+        //Add help handling
+        commandHandlers
+            .getOrDefault(message.getCommandArgs().getOrNull(1), get<HelpHandler>())
+            .handle(get<Requester>(), message)
     }
 
 }
